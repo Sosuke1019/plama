@@ -6,7 +6,7 @@ from datetime import datetime
 class user(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
-    name = Column(Text, nullable=False)
+    name = Column(Text, unique=True, nullable=False)
     room_number = Column(Text, nullable=False)
     hash = Column(VARCHAR, nullable=False)
 
@@ -45,3 +45,13 @@ class product(Base):
         self.picture_path =  picture_path
         self.date =  date
 
+
+# from models.database import db_session
+# from models.models import product
+# c1 = product("1","フライパン","このフライパンは1年利用しました。テフロン加工は現在も機能しており、焦げ付くことなく利用できます","aaa")
+# c2 = product("2","パンツ","このパンツはLサイズで男性用です。気になる方がいましたらご連絡下さい","bbb")
+# c3 = product("3","sen","少しギシギシ言うので、壊れやすいかと思います。しかし、汚れなどは一切ございません。捨てることになるので、ぜひ使って頂きたいです。","ccc")
+# db_session.add(c1)
+# db_session.add(c2)
+# db_session.add(c3)
+# db_session.commit()
