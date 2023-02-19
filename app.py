@@ -1,7 +1,9 @@
+import os
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from models.models import user
 import sqlite3
+from datetime import timedelta
 from helpers  import generate_password_hash
 
 #DBに接続
@@ -10,6 +12,11 @@ db = conn.cursor()
 
 
 app = Flask(__name__)
+
+#セッション情報を暗号化するためのキー
+app.secret_key = os.urandom(24)
+#セッションの有効時間を設定する
+app.permanent_session_lifetime = timedelta(minutes=5)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -22,7 +29,7 @@ Session(app)
 @app.route('/')
 def index():
     """Show a list of products"""
-    # user_id = session["user_id"]
+    
 
     users = user.query.all()
     return render_template("index.html", users=users)
@@ -65,8 +72,8 @@ def register():
 
         #ユーザー名が既に存在する場合はエラーページをリターンする
         db.execute("SELECT * FROM user WHERE name = ?", (username,))
-        rows = db.fetchone()
-        if rows is not None:
+        rows_username_check = db.fetchone()
+        if rows_username_check is not None:
             return render_template("error.html", message="invalid username")
 
         #部屋番号が空白の場合はエラーページをリターンする
@@ -76,8 +83,8 @@ def register():
 
         #部屋番号が既に存在する場合はエラーページをリターンする
         db.execute("SELECT * FROM user WHERE room_number = ?", (room_number,))
-        rows = db.fetchone()
-        if rows is not None:
+        rows_room_number_check = db.fetchone()
+        if rows_room_number_check is not None:
             return render_template("error.html", message="invalid room-number")
 
         #パスワードが空白の場合・confiramationと一致しない場合はエラーページをリターンする
@@ -91,9 +98,12 @@ def register():
         hash_password = generate_password_hash(request.form.get("password"))
 
         #新しいユーザ・部屋番号・ハッシュをuserテーブルにINSERTする
-        new_user = db.execute("INSERT INTO user (name, room_number, hash) VALUES(?,?,?)", (username, room_number, hash_password))
+        db.execute("INSERT INTO user (name, room_number, hash) VALUES(?,?,?)", (username, room_number, hash_password))
 
         #取得した行のidをsessionの中に保存する
+        new_user = db.execute("SELECT * FROM user WHERE name = ?", (username,))
+        new_user = new_user.fetchone()
+        session["user_id"] = new_user[0]
 
         conn.close()
 
