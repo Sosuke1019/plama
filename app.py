@@ -70,7 +70,6 @@ def register():
 
         #部屋番号が空白の場合はエラーページをリターンする
         room_number = request.form.get("room_number")
-        print(room_number)
         if not room_number:
             return render_template("error.html", message="missing room-number")
 
@@ -80,13 +79,16 @@ def register():
         if rows is not None:
             return render_template("error.html", message="invalid room-number")
 
-        #パスワードが空白の場合はミスをリターンする
-
-        #passwordとconfirmationのパスワードが異なる場合はミスをリターンする
+        #パスワードが空白の場合・confiramationと一致しない場合はエラーページをリターンする
+        password = request.form.get("password")
+        if not password:
+            return render_template("error.html", message="missing password")
+        elif password != request.form.get("confirmation"):
+            return render_template("error.html", message="passwords don't match")
 
         #パスワードをハッシュ化する
 
-        #新しいユーザ・部屋番号・ハッシュをuserにINSERTする
+        #新しいユーザ・部屋番号・ハッシュをuserテーブルにINSERTする
 
         #取得した行のidをsessionの中に保存する
 
