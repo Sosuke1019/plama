@@ -2,6 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from models.models import user
 import sqlite3
+from helpers  import generate_password_hash
 
 #DBに接続
 conn = sqlite3.connect('models/plama.db',isolation_level=None, check_same_thread=False)
@@ -87,8 +88,10 @@ def register():
             return render_template("error.html", message="passwords don't match")
 
         #パスワードをハッシュ化する
+        hash_password = generate_password_hash(request.form.get("password"))
 
         #新しいユーザ・部屋番号・ハッシュをuserテーブルにINSERTする
+        new_user = db.execute("INSERT INTO user (name, room_number, hash) VALUES(?,?,?)", (username, room_number, hash_password))
 
         #取得した行のidをsessionの中に保存する
 
