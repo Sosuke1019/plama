@@ -82,7 +82,7 @@ def register():
 
         #取得した行のidをsessionの中に保存する
 
-        # flash("Registered") -> layout.htmlも修正する
+        flash("Registered")
         
         return redirect("/")
     else:
