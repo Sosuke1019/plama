@@ -57,20 +57,28 @@ def register():
     """Register user"""
     if request.method == "POST":
 
-        #ユーザー名が空白の場合はミスをリターンする
+        #ユーザー名が空白の場合はエラーページをリターンする
         username = request.form.get("username")
-        if not request.form.get("username"):
+        if not username:
             return render_template("error.html", message="missing name")
 
-        #ユーザー名が既に存在する場合はミスをリターンする
+        #ユーザー名が既に存在する場合はエラーページをリターンする
         db.execute("SELECT * FROM user WHERE name = ?", (username,))
         rows = db.fetchone()
-        conn.close()
         if rows is not None:
             return render_template("error.html", message="invalid username")
 
-        #部屋番号が空白/既に存在する場合はミスをリターンする
-        # room_number = request.form.get("room_numbrer")
+        #部屋番号が空白の場合はエラーページをリターンする
+        room_number = request.form.get("room_number")
+        print(room_number)
+        if not room_number:
+            return render_template("error.html", message="missing room-number")
+
+        #部屋番号が既に存在する場合はエラーページをリターンする
+        db.execute("SELECT * FROM user WHERE room_number = ?", (room_number,))
+        rows = db.fetchone()
+        if rows is not None:
+            return render_template("error.html", message="invalid room-number")
 
         #パスワードが空白の場合はミスをリターンする
 
@@ -81,6 +89,8 @@ def register():
         #新しいユーザ・部屋番号・ハッシュをuserにINSERTする
 
         #取得した行のidをsessionの中に保存する
+
+        conn.close()
 
         flash("Registered")
         
