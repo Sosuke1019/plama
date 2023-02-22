@@ -6,6 +6,7 @@ import sqlite3
 from datetime import timedelta
 from helpers  import generate_password_hash
 
+
 #DBに接続
 conn = sqlite3.connect('models/plama.db',isolation_level=None, check_same_thread=False)
 db = conn.cursor()
@@ -16,7 +17,7 @@ app = Flask(__name__)
 #セッション情報を暗号化するためのキー
 app.secret_key = os.urandom(24)
 #セッションの有効時間を設定する
-app.permanent_session_lifetime = timedelta(minutes=5)
+app.permanent_session_lifetime = timedelta(minutes=1)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -34,30 +35,54 @@ def index():
     users = user.query.all()
     return render_template("index.html", users=users)
 
-# @app.route('/login', methods=["GET", "POST"])
-# def login():
-#     """Login user"""
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Login user"""
 
-#     #sessionをクリアする
-#     session.clear()
+    #sessionをクリアする
+    session.clear()
 
-#     if request.method == "POST":
+    if request.method == "POST":
 
-#         #取得した行のidをsessionの中に保存する
+        #ユーザー名が空白の場合はエラーページをリターンする
+        username = request.form.get("username")
+        print(username)
+        if not username:
+            return render_template("error.html", message="missing name")
+        
+        #パスワードが空白の場合はエラーページをリターンする
+        password = request.form.get("password")
+        if not password:
+            return render_template("error.html", message="missing password")
+        
+        #フォームで送られてきた名前の存在とパスワードが正しいかを確認する
+        db.execute("SELECT * FROM user WHERE name = ?", (username,))
+        rows_username_check = db.fetchone()
+        if rows_username_check is not None or not db.execute("SELECT * FROM user WHERE has = ?", (password,)):
+            return render_template("error.html", message="invalid username and/or password")
 
+        #取得した行のidをsessionの中に保存する
+        new_user = db.execute("SELECT * FROM user WHERE name = ?", (username,))
+        new_user = new_user.fetchone()
+        session["user_id"] = new_user[0]
 
-#         return redirect("/")
-#     else:
-#         return render_template("login.html")
+        conn.close()
 
-# @app.route('/logut')
-# def logout():
-#     """Log user out"""
+        flash("logged in")
 
-#     #sessionをクリアする
-#     session.clear()
+        return redirect("/")
+    else:
+        return render_template("login.html")
+    
 
-#     return redirect("/")
+@app.route('/logut')
+def logout():
+    """Log user out"""
+
+    #sessionをクリアする
+    session["user_id"] = None
+
+    return redirect("/login")
 
 
 @app.route('/register', methods=["GET", "POST"])
