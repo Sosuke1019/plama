@@ -4,20 +4,21 @@ from flask_session import Session
 from models.models import user
 import sqlite3
 from datetime import timedelta
-from helpers  import generate_password_hash
+from flask_bcrypt import Bcrypt
 
+
+app = Flask(__name__)
 
 #DBに接続
 conn = sqlite3.connect('models/plama.db',isolation_level=None, check_same_thread=False)
 db = conn.cursor()
 
-
-app = Flask(__name__)
-
 #セッション情報を暗号化するためのキー
 app.secret_key = os.urandom(24)
 #セッションの有効時間を設定する
-app.permanent_session_lifetime = timedelta(minutes=1)
+# app.permanent_session_lifetime = timedelta(minutes=1)
+
+bcrypt = Bcrypt(app)
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -46,7 +47,6 @@ def login():
 
         #ユーザー名が空白の場合はエラーページをリターンする
         username = request.form.get("username")
-        print(username)
         if not username:
             return render_template("error.html", message="missing name")
         
@@ -58,7 +58,9 @@ def login():
         #フォームで送られてきた名前の存在とパスワードが正しいかを確認する
         db.execute("SELECT * FROM user WHERE name = ?", (username,))
         rows_username_check = db.fetchone()
-        if rows_username_check is not None or not db.execute("SELECT * FROM user WHERE has = ?", (password,)):
+        password_check = db.execute("SELECT hash FROM user WHERE name = ?", (username,))
+        password_check = password_check.fetchone()
+        if rows_username_check is None or not bcrypt.check_password_hash(password_check[0], password):
             return render_template("error.html", message="invalid username and/or password")
 
         #取得した行のidをsessionの中に保存する
@@ -120,7 +122,7 @@ def register():
             return render_template("error.html", message="passwords don't match")
 
         #パスワードをハッシュ化する
-        hash_password = generate_password_hash(request.form.get("password"))
+        hash_password = bcrypt.generate_password_hash(request.form.get("password")).decode('utf-8')
 
         #新しいユーザ・部屋番号・ハッシュをuserテーブルにINSERTする
         db.execute("INSERT INTO user (name, room_number, hash) VALUES(?,?,?)", (username, room_number, hash_password))
