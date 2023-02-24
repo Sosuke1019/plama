@@ -1,9 +1,10 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey, DateTime, VARCHAR
 from models.database import Base
 from datetime import datetime
+from flask_login import UserMixin
 
 #userテーブル
-class user(Base):
+class user(UserMixin, Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     name = Column(Text, unique=True, nullable=False)
@@ -28,7 +29,7 @@ class user(Base):
 
 
 #productテーブル
-class product(Base):
+class product(UserMixin, Base):
     __tablename__ = "product"
     id = Column(Integer, primary_key=True, autoincrement=True, nullable=False)
     user_id  = Column(Integer, ForeignKey("user.id"), nullable=False)
