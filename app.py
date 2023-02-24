@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request
 from flask_session import Session
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_sqlalchemy import SQLAlchemy
@@ -133,14 +133,14 @@ def register():
         return render_template("register.html")
     
 
-# @app.route('/sell', methods=["GET", "POST"])
-# @login_required
-# def sell():
-#     """Sell products"""
-#     if request.method == "POST":
-#         return redirect("/")
-#     else:
-#         return render_template("sell.html")
+@app.route('/sell', methods=["GET", "POST"])
+@login_required
+def sell():
+    """Sell products"""
+    if request.method == "POST":
+        return redirect("/")
+    else:
+        return render_template("sell.html")
 
 # @app.route('/edit', methods=["GET", "POST"])
 # @login_required
