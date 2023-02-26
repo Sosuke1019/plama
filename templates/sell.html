@@ -6,17 +6,43 @@
 
 {% block main %}
     <div class="h1 pb-2 mb-4 text-danger border-bottom border-danger">出品画面</div>
-    <form action="/sell" method="post">
-            <label for="formFileLg" class="form-label">画像</label>
-            <input autofocus class="form-control mx-auto w-auto" id="image" name="image" type="file">
+    <!--type属性が'file'のinput要素を含む場合は「multipart/form-data」を指定する。-->
+    <form action="/sell" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="file" class="form-label">商品画像</label>
+            <input autofocus class="form-control mx-auto w-auto" id="file" name="file" type="file" onchange="previewImage(this);">
         </div>
+
+        <p>
+            Preview:<br>
+            <canvas id="preview" style="max-width:200px;"></canvas>
+        </p>
+        <script>
+            function previewImage(obj)
+            {
+                var fileReader = new FileReader();
+                fileReader.onload = (function() {
+                    var canvas = document.getElementById('preview');
+                    var ctx = canvas.getContext('2d');
+                    var image = new Image();
+                    image.src = fileReader.result;
+                    image.onload = (function () {
+                        canvas.width = image.width;
+                        canvas.height = image.height;
+                        ctx.drawImage(image, 0, 0);
+                    });
+                });
+                fileReader.readAsDataURL(obj.files[0]);
+            }
+            </script>
+
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">商品名</label>
+            <label for="title" class="form-label">商品名</label>
             <input autocomplete="off" class="form-control mx-auto w-auto" id="title" name="title" placeholder="[新品] コップ" type="text">
         </div>
         <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">商品の説明</label>
-            <textarea autocomplete="off"  class="form-control mx-auto w-auto" id="body" name="body" type="text"  rows="5"></textarea>
+            <label for="body" class="form-label">商品の説明</label>
+            <textarea autocomplete="off"  class="form-control mx-auto w-auto" id="body" name="body" type="text" rows="5"></textarea>
         </div>
         <button class="btn btn-primary" type="submit">出品する!</button>
     </form>

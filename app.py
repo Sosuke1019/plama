@@ -1,22 +1,34 @@
 import os
 from flask import Flask, flash, redirect, render_template, request
 from flask_session import Session
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from models.models import user, product
 from models.database import db_session
 from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
+import base64
+
+
+# 画像のアップロード先のディレクトリ
+UPLOAD_FOLDER = '/static/images'
+# アップロードされる拡張子の制限
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///models/plama.db'
 app.config['SECRET_KEY'] = os.urandom(24)
 db = SQLAlchemy(app)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#16MBまでのfileをアップロード出来る
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-#falsk-loginとFlaskアプリを紐づける
+# falsk-loginとFlaskアプリを紐づける
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-#セッション情報を暗号化するためのキー
+# セッション情報を暗号化するためのキー
 app.secret_key = os.urandom(24)
 
 # Ensure templates are auto-reloaded
@@ -71,7 +83,6 @@ def login():
             return redirect("/")
         else:
             return render_template("error.html", message="invalid password")
-        
     else:
         return render_template("login.html")
     
@@ -138,6 +149,45 @@ def register():
 def sell():
     """Sell products"""
     if request.method == "POST":
+        # .と拡張子の確認
+        def allowed_file(filename):
+            return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
+        
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return render_template("error.html", message="no file page")
+
+        # fileが選択されていなかった場合はエラーページをリターンする
+        file = request.files['file']
+        if file.filename == '':
+            return render_template("error.html", message="no selected file")
+        
+        # base64フォーマットにencodeする
+        if file and allowed_file(file.filename):
+            img_base64 = base64.b64encode(file.read())
+            data = img_base64.decode()
+            print(img_base64 == data)
+
+        # 商品名が空白の場合はエラーページをリターンする
+        title = request.form.get("title")
+        if not title:
+            return render_template("error.html", message="missing title")
+
+        # 説明文が空白の場合はエラーページをリターンする
+        body = request.form.get("body")
+        if not body:
+            return render_template("error.html", message="missing explanation")
+        
+        # アップロード時の日付と時刻を取得
+        date = datetime.datetime.now()
+        
+        # base64フォーマットをDBに保存
+        Product = product(user_id=current_user.id, title=title, body=body, picture_path=img_base64, date=date)
+        db_session.add(Product)
+        db_session.commit()
+
+        flash("Success")
+
         return redirect("/")
     else:
         return render_template("sell.html")
