@@ -7,17 +7,18 @@
 {% block main %}
     <div class="h1 pb-2 mb-4 text-danger border-bottom border-danger">モノの一覧</div>
     <div class="row row-cols-1 row-cols-md-4 g-4">
-        {% for user in users %}
+        {% for product in products %}
             <div class="col">
                 <div class="card text-bg-light border-dark h-100" style="width: 26rem;">
-                    <img src="/static/images/test_image.jpg" class="card-img-top" alt="Image">
+                    <!-- <img src="/static/images/test_image.jpg" class="card-img-top" alt="Image"> -->
+                    <img src="data:image/jpeg;base64,{{ image_file_to_base64(product['picture_path']) }}" alt="Image">
                     <div class="card-body text-dark">
-                        <div class="h5"card-title">Card title</div>
-                        <div class="h6 card-subtitle">from: {{ user['name'] }} {{ user['room_number'] }}</div>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <div class="h5"card-title">{{ product['title'] }}</div>
+                        <div class="h6 card-subtitle">from:</div>
+                        <p class="card-text">{{ product['body'] }}</p>
                     </div>
                     <div class="card-footer">
-                        <small>登録日</small>
+                        <small>投稿日:{{ product['date'] }}</small>
                     </div>
                 </div>
             </div>

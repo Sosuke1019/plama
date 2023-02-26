@@ -52,8 +52,16 @@ def unauthorized():
 def index():
     """Show a list of products"""
 
-    users = user.query.all()
-    return render_template("index.html", users=users)
+    products = product.query.all()
+
+    def image_file_to_base64(encoded_picture_path):
+        return encoded_picture_path.decode('utf-8')
+
+
+    # print(product.query.get(picture_path))
+    return render_template("index.html", products=products, image_file_to_base64=image_file_to_base64)
+    #name=, room_number=
+    
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
