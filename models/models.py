@@ -25,7 +25,7 @@ class product(UserMixin, Base):
     title = Column(Text, nullable=False)
     body  = Column(Text, nullable=False)
     picture_path  = Column(Text, nullable=False)
-    date = Column(DateTime, default=datetime.now(), nullable=False)
+    date = Column(Text, default=datetime.now(), nullable=False)
 
     #初期化する
     def __init__(self, user_id=None,title=None,body=None,picture_path=None,date=None):

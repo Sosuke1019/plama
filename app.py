@@ -43,24 +43,33 @@ app.config["SESSION_TYPE"] = "filesystem"
 def load_user(id):
     return user.query.get(id)
 
+
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect('/login')
+
 
 @app.route('/')
 @login_required
 def index():
     """Show a list of products"""
 
-    products = product.query.all()
-
     def image_file_to_base64(encoded_picture_path):
         return encoded_picture_path.decode('utf-8')
+    
+    products = product.query.all()
+
+    # 出品された商品が無かった場合の処理
+    if not products:
+        return render_template("index.html")
+
+    # productテーブルのuser_idに一致するuserテーブルのレコードのnameとroom_numberを取ってくる
+    User = db_session.query(user).filter(user.id == product.user_id).one()
+    name = User.name
+    room_number = User.room_number
 
 
-    # print(product.query.get(picture_path))
-    return render_template("index.html", products=products, image_file_to_base64=image_file_to_base64)
-    #name=, room_number=
+    return render_template("index.html", products=products, image_file_to_base64=image_file_to_base64, name=name, room_number=room_number)
     
 
 @app.route('/login', methods=["GET", "POST"])
@@ -173,8 +182,6 @@ def sell():
         # base64フォーマットにencodeする
         if file and allowed_file(file.filename):
             img_base64 = base64.b64encode(file.read())
-            data = img_base64.decode()
-            print(img_base64 == data)
 
         # 商品名が空白の場合はエラーページをリターンする
         title = request.form.get("title")
@@ -187,7 +194,7 @@ def sell():
             return render_template("error.html", message="missing explanation")
         
         # アップロード時の日付と時刻を取得
-        date = datetime.datetime.now()
+        date = datetime.date.today()
         
         # base64フォーマットをDBに保存
         Product = product(user_id=current_user.id, title=title, body=body, picture_path=img_base64, date=date)

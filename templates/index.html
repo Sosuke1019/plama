@@ -13,8 +13,8 @@
                     <!-- <img src="/static/images/test_image.jpg" class="card-img-top" alt="Image"> -->
                     <img src="data:image/jpeg;base64,{{ image_file_to_base64(product['picture_path']) }}" alt="Image">
                     <div class="card-body text-dark">
-                        <div class="h5"card-title">{{ product['title'] }}</div>
-                        <div class="h6 card-subtitle">from:</div>
+                        <div class="h5"card-title">出品者: {{ name }} {{ room_number }}</div>
+                        <div class="h6 card-subtitle"></div>
                         <p class="card-text">{{ product['body'] }}</p>
                     </div>
                     <div class="card-footer">
