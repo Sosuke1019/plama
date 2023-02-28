@@ -9,11 +9,10 @@
     <div class="row row-cols-1 row-cols-md-4 g-4">
         {% for product in products %}
             <div class="col">
-                <div class="card text-bg-light border-dark h-100" style="width: 26rem;">
-                    <!-- <img src="/static/images/test_image.jpg" class="card-img-top" alt="Image"> -->
-                    <img src="data:image/jpeg;base64,{{ image_file_to_base64(product['picture_path']) }}" alt="Image">
+                <div class="card text-bg-light border-dark h-100" style="width: 22rem;">
+                    <img src="data:image/jpeg;base64,{{ image_file_to_base64(product['picture_path']) }}" alt="Image" width="100%" height="100%">
                     <div class="card-body text-dark">
-                        <div class="h5"card-title">出品者: {{ name }} {{ room_number }}</div>
+                        <div class="h5"card-title">出品者: {{ search_user(product['user_id']).name }} ({{ search_user(product['user_id']).room_number }})</div>
                         <div class="h6 card-subtitle"></div>
                         <p class="card-text">{{ product['body'] }}</p>
                     </div>

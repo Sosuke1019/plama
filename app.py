@@ -64,12 +64,16 @@ def index():
         return render_template("index.html")
 
     # productテーブルのuser_idに一致するuserテーブルのレコードのnameとroom_numberを取ってくる
-    User = db_session.query(user).filter(user.id == product.user_id).one()
-    name = User.name
-    room_number = User.room_number
+    # productの個数分の要素(productに対応した名前)が入ったリストを取り出す。
+    # user_name = db_session.query(user).join(product, product.user_id == user.id).all()
+    def search_user(product_user_id):
+        return user.query.filter_by(id=product_user_id).first()
+    
+    # productテーブルのuser_idに一致するuserテーブルのレコードのnameとroom_numberを取ってきたい。.nameで名前を返す。※nameを一発で取ってこれるならそれでもいい。
+    # SELECT name FROM user WHERE id = (SELECT user_id FROM product);
+    # User = user.query.filter_by(room_number=room_number).first()
 
-
-    return render_template("index.html", products=products, image_file_to_base64=image_file_to_base64, name=name, room_number=room_number)
+    return render_template("index.html", products=products, image_file_to_base64=image_file_to_base64, search_user=search_user)
     
 
 @app.route('/login', methods=["GET", "POST"])
