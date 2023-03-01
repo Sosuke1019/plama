@@ -57,22 +57,16 @@ def index():
     def image_file_to_base64(encoded_picture_path):
         return encoded_picture_path.decode('utf-8')
     
+    # productテーブルのuser_idに一致するuserテーブルのレコードを取ってくる
+    def search_user(product_user_id):
+        return user.query.filter_by(id=product_user_id).first()
+    
     products = product.query.all()
 
     # 出品された商品が無かった場合の処理
     if not products:
         return render_template("index.html")
-
-    # productテーブルのuser_idに一致するuserテーブルのレコードのnameとroom_numberを取ってくる
-    # productの個数分の要素(productに対応した名前)が入ったリストを取り出す。
-    # user_name = db_session.query(user).join(product, product.user_id == user.id).all()
-    def search_user(product_user_id):
-        return user.query.filter_by(id=product_user_id).first()
     
-    # productテーブルのuser_idに一致するuserテーブルのレコードのnameとroom_numberを取ってきたい。.nameで名前を返す。※nameを一発で取ってこれるならそれでもいい。
-    # SELECT name FROM user WHERE id = (SELECT user_id FROM product);
-    # User = user.query.filter_by(room_number=room_number).first()
-
     return render_template("index.html", products=products, image_file_to_base64=image_file_to_base64, search_user=search_user)
     
 
@@ -211,15 +205,25 @@ def sell():
     else:
         return render_template("sell.html")
 
-# @app.route('/edit', methods=["GET", "POST"])
-# @login_required
-# def edit():
-#     """Edit a list of user's products"""
-#     if request.method == "POST":
-#         return redirect("/edit")
-#     else:
-#         return render_template("edit.html")
+@app.route('/edit', methods=["GET", "POST"])
+@login_required
+def edit():
+    """Edit a list of user's products"""
+    if request.method == "POST":
+        pass
+        
+    else:
+        def image_file_to_base64(encoded_picture_path):
+            return encoded_picture_path.decode('utf-8')
+    
+        # 該当するレコードを複数返したい
+        products = db_session.query(product).filter_by(user_id=current_user.id).all()
 
+        # 出品された商品が無かった場合の処理
+        if not products:
+            return render_template("edit.html")
+        
+        return render_template("edit.html", products=products, image_file_to_base64=image_file_to_base64)
 
 if __name__ == "__main__":
     app.run()
