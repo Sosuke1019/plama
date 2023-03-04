@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, redirect, render_template, request
+from flask import Flask, url_for, flash, redirect, render_template, request
 from flask_session import Session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
@@ -13,7 +13,7 @@ import base64
 # 画像のアップロード先のディレクトリ
 UPLOAD_FOLDER = '/static/images'
 # アップロードされる拡張子の制限
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'txt', 'png', 'jpg', 'jpeg', 'gif'}
 
 
 app = Flask(__name__)
@@ -180,11 +180,13 @@ def sell():
         # base64フォーマットにencodeする
         if file and allowed_file(file.filename):
             img_base64 = base64.b64encode(file.read())
+        else:
+            return render_template("error.html", message="Check the extension of file", sub_message="('.txt', '.png', '.jpg', '.jpeg', and '.gif' are supported. Others are not supported.)")
 
         # 商品名が空白の場合はエラーページをリターンする
         title = request.form.get("title")
         if not title:
-            return render_template("error.html", message="missing title")
+            return render_template("error.html", message="missing name of product")
 
         # 説明文が空白の場合はエラーページをリターンする
         body = request.form.get("body")
@@ -210,12 +212,33 @@ def sell():
 def edit():
     """Edit a list of user's products"""
     if request.method == "POST":
-        pass
+        def image_file_to_base64(encoded_picture_path):
+            return encoded_picture_path.decode('utf-8')
+        
+        #削除したい商品名を取得
+        delete_product_name = request.form.get("title")
+        if not delete_product_name:
+            return render_template("error.html", message="missing name of product")
+
+        #DBにない商品名ならエラーを返す
+        product_title = product.query.filter_by(title=delete_product_name).first()
+        if product_title is None:
+            return render_template("error.html", message="invalid nome of product")
+        
+        #取得した商品名を削除
+        delete_product = product.query.filter_by(title=delete_product_name).one()
+        db_session.delete(delete_product)
+        db_session.commit()
+
+        # 該当するレコードを複数返したい
+        products = db_session.query(product).filter_by(user_id=current_user.id).all()
+        
+        return render_template("edit.html", products=products, image_file_to_base64=image_file_to_base64)
         
     else:
         def image_file_to_base64(encoded_picture_path):
             return encoded_picture_path.decode('utf-8')
-    
+
         # 該当するレコードを複数返したい
         products = db_session.query(product).filter_by(user_id=current_user.id).all()
 
@@ -224,6 +247,7 @@ def edit():
             return render_template("edit.html")
         
         return render_template("edit.html", products=products, image_file_to_base64=image_file_to_base64)
+    
 
 if __name__ == "__main__":
     app.run()
