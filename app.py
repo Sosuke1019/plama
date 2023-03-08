@@ -1,6 +1,5 @@
 import os
-from flask import Flask, url_for, flash, redirect, render_template, request
-from flask_session import Session
+from flask import Flask, flash, redirect, render_template, request
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from models.models import user, product
@@ -247,7 +246,3 @@ def edit():
             return render_template("edit.html")
         
         return render_template("edit.html", products=products, image_file_to_base64=image_file_to_base64)
-    
-
-if __name__ == "__main__":
-    app.run()
