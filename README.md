@@ -44,6 +44,9 @@ Video Demo: [Youtube](https://youtu.be/6x7ziMTXC70) <br>
 - https://bootstrap-guide.com/layout/columns
 - https://qiita.com/tomo0/items/a762b1bc0f192a55eae8
 - https://qiita.com/Kotabrog/items/fb328b72ac94137897af
+- https://it-dxblog.com/vscode-python-venv/
+- https://nansystem.com/sqlite3-enable-foreign-key/
+- https://qiita.com/msrks/items/d9c327dd81749ec01d1d
 
 ## Author
 [GitHub](https://github.com/Sosuke1019)
