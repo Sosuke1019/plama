@@ -42,8 +42,6 @@ Video Demo: [Youtube](https://github.com/Sosuke1019) <br>
 - When an item is purchased, an email notification will be sent to the user.
 - Favorite function
 
-Translated with www.DeepL.com/Translator (free version)
-
 ## Reference
 - https://bootstrap-guide.com/layout/columns
 - https://qiita.com/tomo0/items/a762b1bc0f192a55eae8
