@@ -13,7 +13,7 @@ By consolidating the information into one web service, it will be easier for the
 Anyone can freely sell their items by registering as a user.
 
 ## Features
-Video Demo: [Youtube](https://github.com/Sosuke1019) <br>
+Video Demo: [Youtube](https://youtu.be/6x7ziMTXC70) <br>
 
 ### Requirement Definition  
 - New Registration
