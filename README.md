@@ -12,8 +12,6 @@ By consolidating the information into one web service, it will be easier for the
 - How it works in a nutshell<br>
 Anyone can freely sell their items by registering as a user.
 
-## Getting Started
-
 ## Features
 Video Demo: [Youtube](https://github.com/Sosuke1019) <br>
 
