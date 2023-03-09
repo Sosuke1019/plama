@@ -12,12 +12,6 @@
 - 仕組みを一言で説明 <br>
 ユーザー登録をする事で誰でも自由にモノを出品する事ができる。
 
-## Requirement
-- ubuntu 20.04.5 
-- Python 3.8.10
-- Flask 2.2.3
-- Werkzeug 2.2.3
-
 ## Getting Started
 
 ## Features
