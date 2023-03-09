@@ -1,7 +1,5 @@
-# name
-
-image or gif
-
+# plama
+![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
 ## Overview
 
 ## Requirement
