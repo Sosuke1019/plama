@@ -1,5 +1,5 @@
 # plama
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+![This is an image](https://github.com/Sosuke1019/plama/blob/main/static/images/plama_indexpage.png)
 ## Overview
 
 ## Requirement
