@@ -2,45 +2,47 @@
 ![This is an image](https://github.com/Sosuke1019/plama/blob/main/static/images/plama_indexpage.png)
 
 ## Overview
-寮でモノ（家具、食材、服...）をラクに引き継ぐ事を可能にするフリマサービス。
+A flea market service that makes it easy to take over things (furniture, food, clothes...) at the dormitory. 
 
 ## Description
-- ペルソナ <br>
-1年間の留学のため、引越しの時期に家具や服を他の寮生に引き継ぎたいと考える寮に住む留学生。友人は1～3名で、さらに友人も同じタイミングで引っ越しをするので、引き継ぐ人がいない。捨てるのは勿体無いけど、わざわざ他の寮生に聞いたりしたくはない。
-- 解決出来る問題 <br>
-上記のペルソナを持った留学生が複数いた場合、グループLINEでは情報をまとめにくい。1つのwebサービスに情報を集約する事で、寮生は貰い手を募集しやすく、貰い手側も情報を探しやすくなる。また、引越しの時期は3週間程度のため、わざわざinstallはしなくてもwebアプリケーションとして利用出来る。
-- 仕組みを一言で説明 <br>
-ユーザー登録をする事で誰でも自由にモノを出品する事ができる。
+-  Persona　<br>
+An international student living in a dormitory who wants to take over furniture and clothes from another student when it is time to move out for a year of study. There is no one to take over because there are one to three friends and furthermore, friends are moving out at the same time. It would be a shame to throw them away, but I don't want to go out of my way to ask other dorm residents.
+- What can be solved <br>
+By consolidating the information into one web service, it will be easier for the students to recruit recipients and for the recipients to search for information. In addition, since the moving period is only about 3 weeks, it can be used as a web application without the need to install it.
+- How it works in a nutshell<br>
+Anyone can freely sell their items by registering as a user.
 
 ## Getting Started
 
 ## Features
 Video Demo: [Youtube](https://github.com/Sosuke1019) <br>
 
-### 要件定義 
-- 新規登録
-- ログイン機能
-	- 名前/部屋番号/パスワード
-- ログアウト機能
-- index画面で出品されたモノを一覧できる
-- 出品画面でモノを出品できる
-	- 写真/商品の名前/商品の説明
--  編集画面から出品したモノを削除できる
+### Requirement Definition  
+- New Registration
+- Login Function
+	- Name/Room number/Password
+- Logout function
+- Listing of items on the index screen
+- Listing items on the "listings" screen
+	- Photo/Product name/Product description
+- Delete an item from the edit screen
 
-### 使用技術
-- フロントエンド：HTML, CSS, Bootstrap
-- フレームワーク：Flask
+### Technologies used
+- Front-end: HTML, CSS, Bootstrap
+- Framework：Flask
 - DB：SQLite3
-- webサーバー：Nginx
-- アプリケーションサーバー：gunicorn
-- 開発環境：Github
+- Web Server：Nginx
+- Application Server：gunicorn
+- Development Environment：Github
 
-### 今後実装したい機能
-- VPSを契約して、ドメインも取得したがNginxとgunicornの実装に時間がかかってしまったため、デプロイ出来ていない。よって、提出後にデプロイまで行う
-- アカウント削除機能を付ける
-- 現在は商品の一覧が表示されるだけだが、商品を選択してアプリケーション内で取引が成立するようにする。
-- 出品した商品が購入された場合、メール通知が来るようにする。
-- お気に入り機能
+### Features to be implemented in the future
+- We have contracted a VPS and obtained a domain, but have not been able to deploy it because it took time to implement Nginx and gunicorn. Therefore, we will deploy after submission.
+- Add an account deletion function.
+- Add the ability to delete an account. Currently, only a list of products is displayed, but the transaction can be completed within the application by selecting a product.
+- When an item is purchased, an email notification will be sent to the user.
+- Favorite function
+
+Translated with www.DeepL.com/Translator (free version)
 
 ## Reference
 - https://bootstrap-guide.com/layout/columns
