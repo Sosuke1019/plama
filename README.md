@@ -33,12 +33,25 @@ Video Demo: [Youtube](https://youtu.be/6x7ziMTXC70) <br>
 - Application Server：gunicorn
 - Development Environment：Github
 
+### Points of Ingenuity
+- SQLAlcheby was used to allow query operations to be performed in Python coding rather than dynamic SQL. This allowed us to check for syntax errors before execution.
+- Nginx was used to reverse proxy requests.
+- Since Nginx cannot handle dynamic processing, requests for dynamic pages were processed by flask via gunicorn.
+- Since there was a deadline for development, flask was chosen because it is a lightweight framework and the most familiar to use.
+
+### Points of difficulty
+- As this was the first time for me to design a DB, I had to check what kind of restrictions I should set for each column.
+- It was difficult to understand the configuration of Nginx and gunicorn, and it took a lot of time.
+- Nginx and gunicorn worked on local, but security configuration was difficult and we could not deploy.
+- We had a hard time implementing an "edit page" that returns different data for each user.
+- When displaying data corresponding to a product on the "index page," it was necessary to fetch data from two DBs, so we created a function to handle this.
+
 ### Features to be implemented in the future
-- We have contracted a VPS and obtained a domain, but have not been able to deploy it because it took time to implement Nginx and gunicorn. Therefore, we will deploy after submission.
+- I signed up for a VPS and got a domain, but have not been able to deploy it because it took a long time to implement Nginx and gunicorn. Therefore, we will deploy after submission.
 - Add an account deletion function.
-- Add the ability to delete an account. Currently, only a list of products is displayed, but the transaction can be completed within the application by selecting a product.
-- When an item is purchased, an email notification will be sent to the user.
-- Favorite function
+- Add a function to allow users to select products and purchase them, although currently only a list of products is displayed.
+- Add an email notification when an item is purchased.
+- Add a "favorite" function.
 
 ## Reference
 - https://bootstrap-guide.com/layout/columns
