@@ -247,5 +247,6 @@ def edit():
         
         return render_template("edit.html", products=products, image_file_to_base64=image_file_to_base64)
     
+
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0" ,port=5000)
