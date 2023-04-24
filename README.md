@@ -30,7 +30,7 @@ Video Demo: [Youtube](https://youtu.be/6x7ziMTXC70) <br>
 - Framework：Flask
 - DB：SQLite3
 - Web Server：Nginx
-- Application Server：gunicorn
+- Application Server：uWSGI
 - Development Environment：Github
 
 ### Points of Ingenuity
